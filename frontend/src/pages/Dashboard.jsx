@@ -1,184 +1,142 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Dashboard() {
+function Dashboard() {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activePage, setActivePage] = useState("Dashboard");
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("Dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
-  const navItems = [
-    { icon: "📊", label: "Dashboard" },
-    { icon: "👤", label: "Profile" },
-    { icon: "✉️", label: "Messages" },
-    { icon: "📈", label: "Analytics" },
-    { icon: "📁", label: "Files" },
-    { icon: "💼", label: "Portfolio" },
-    { icon: "🔖", label: "Saved" },
-    { icon: "⚙️", label: "Settings" },
+  const menuItems = [
+    { name: "Dashboard", icon: "🏠" },
+    { name: "Profile", icon: "👤" },
+    { name: "Messages", icon: "💬" },
+    { name: "Analytics", icon: "📊" },
+    { name: "Files", icon: "📁" },
+    { name: "Portfolio", icon: "💼" },
+    { name: "Saved", icon: "🔖" },
+    { name: "Settings", icon: "⚙️" },
   ];
 
-  const allRows = [
-    ["#1082", "Alex Mercer", "Upgraded Plan", "Completed", "bg-green-100 text-green-700"],
-    ["#1081", "Jane Doe", "Support Ticket", "Pending", "bg-yellow-100 text-yellow-700"],
-    ["#1080", "David Kim", "Cancelled Order", "Failed", "bg-red-100 text-red-700"],
-    ["#1079", "Sarah Wilson", "Purchased Product", "Completed", "bg-green-100 text-green-700"],
-    ["#1078", "John Smith", "Password Reset", "Waiting", "bg-yellow-100 text-yellow-700"],
-  ];
-  const rows = allRows.filter(r =>
-    r[1].toLowerCase().includes(search.toLowerCase()) ||
-    r[2].toLowerCase().includes(search.toLowerCase())
-  );
-
-  const cards = [
-    { icon: "👥", value: "8,451", label: "Total Visitors", bg: "bg-blue-100 text-blue-600" },
-    { icon: "💲", value: "$51,200", label: "Revenue", bg: "bg-green-100 text-green-600" },
-    { icon: "🛒", value: "320", label: "Sales", bg: "bg-orange-100 text-orange-600" },
-    { icon: "⏰", value: "99.9%", label: "Server Uptime", bg: "bg-purple-100 text-purple-600" },
+  const activities = [
+    { title: "Website Project", status: "Completed", date: "Today" },
+    { title: "React Dashboard", status: "In Progress", date: "Yesterday" },
+    { title: "MongoDB Authentication", status: "Completed", date: "2 Days ago" },
+    { title: "Portfolio Update", status: "Pending", date: "3 Days ago" },
   ];
 
-  const renderContent = () => {
-    if (activeTab === "Dashboard") return (
-      <>
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {cards.map((c,i)=>(
-            <div key={i} className="bg-white p-6 rounded-xl shadow-sm flex items-center gap-4">
-              <div className={`w-14 h-14 ${c.bg} rounded-xl flex items-center justify-center text-2xl`}>{c.icon}</div>
-              <div><h3 className="text-2xl font-bold">{c.value}</h3><p className="text-gray-500 text-sm">{c.label}</p></div>
-            </div>
-          ))}
-        </section>
-        <section className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="p-6 border-b"><h3 className="text-lg font-bold">Recent Activity</h3></div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50"><tr>{["ID","User","Action","Status"].map(h=><th key={h} className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{h}</th>)}</tr></thead>
-              <tbody className="divide-y">
-                {rows.map((r,i)=>(
-                  <tr key={i} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm">{r[0]}</td>
-                    <td className="px-6 py-4 text-sm font-medium">{r[1]}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{r[2]}</td>
-                    <td className="px-6 py-4"><span className={`px-3 py-1 rounded-full text-xs font-semibold ${r[4]}`}>{r[3]}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </>
-    );
-    if (activeTab === "Profile") return (
-      <div className="bg-white rounded-xl shadow-sm p-8 max-w-2xl">
-        <div className="flex items-center gap-6 mb-6">
-          <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">A</div>
-          <div><h2 className="text-2xl font-bold">Admin User</h2><p className="text-gray-500">admin@example.com</p>
-          <span className="inline-block mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">Active</span></div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="p-4 bg-gray-50 rounded-lg"><p className="text-xs text-gray-500">Phone</p><p className="font-semibold">+92 300 1234567</p></div>
-          <div className="p-4 bg-gray-50 rounded-lg"><p className="text-xs text-gray-500">Location</p><p className="font-semibold">Karachi, Pakistan</p></div>
-          <div className="p-4 bg-gray-50 rounded-lg"><p className="text-xs text-gray-500">Joined</p><p className="font-semibold">Jan 2024</p></div>
-          <div className="p-4 bg-gray-50 rounded-lg"><p className="text-xs text-gray-500">Role</p><p className="font-semibold">Administrator</p></div>
-        </div>
-        <button className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Edit Profile</button>
-      </div>
-    );
-    if (activeTab === "Messages") return (
-      <div className="bg-white rounded-xl shadow-sm p-6 max-w-2xl">
-        <h3 className="text-lg font-bold mb-4">Inbox ✉️</h3>
-        {[["Alex Mercer","Hey, plan upgrade ho gaya!","2m"],["Jane Doe","Support chahiye tha","1h"],["David Kim","Thanks for help","3h"]].map((m,i)=>(
-          <div key={i} className="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-lg border-b cursor-pointer">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-xl">👤</div>
-            <div className="flex-1"><p className="font-semibold">{m[0]}</p><p className="text-sm text-gray-500">{m[1]}</p></div>
-            <span className="text-xs text-gray-400">{m[2]}</span>
-          </div>
-        ))}
-      </div>
-    );
-    if (activeTab === "Analytics") return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {[["Traffic Growth","+24% this month","📈","bg-blue-500"],["Conversion Rate","3.2%","🎯","bg-green-500"],["Bounce Rate","42%","📉","bg-orange-500"],["Avg. Session","4m 32s","⏱️","bg-purple-500"]].map((a,i)=>(
-          <div key={i} className="bg-white p-6 rounded-xl shadow-sm">
-            <div className={`w-12 h-12 ${a[3]} rounded-lg flex items-center justify-center text-white text-xl mb-3`}>{a[2]}</div>
-            <p className="text-gray-500 text-sm">{a[0]}</p><p className="text-2xl font-bold">{a[1]}</p>
-          </div>
-        ))}
-      </div>
-    );
-    if (activeTab === "Files") return (
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <h3 className="text-lg font-bold mb-4">My Files 📁</h3>
-        {[["Project Report.pdf","2.4 MB","📄"],["Design Mockup.png","1.8 MB","🖼️"],["Data Sheet.xlsx","850 KB","📊"]].map((f,i)=>(
-          <div key={i} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-3">
-            <span className="text-3xl">{f[2]}</span>
-            <div className="flex-1"><p className="font-semibold">{f[0]}</p><p className="text-xs text-gray-500">{f[1]}</p></div>
-            <button className="text-blue-600 text-sm font-semibold">Download</button>
-          </div>
-        ))}
-      </div>
-    );
-    if (activeTab === "Portfolio") return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[["E-commerce Site","React + Node","🛒"],["Dashboard App","MERN Stack","📊"],["Blog Platform","Next.js","📝"]].map((p,i)=>(
-          <div key={i} className="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div className="h-32 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-5xl">{p[2]}</div>
-            <div className="p-4"><p className="font-bold">{p[0]}</p><p className="text-sm text-gray-500">{p[1]}</p></div>
-          </div>
-        ))}
-      </div>
-    );
-    if (activeTab === "Saved") return (
-      <div className="bg-white rounded-xl shadow-sm p-6 max-w-2xl">
-        <h3 className="text-lg font-bold mb-4">Saved Items 🔖</h3>
-        <p className="text-gray-500">Tum ne abhi kuch save nahi kiya. Koi item save karo ge to yahan dikhega.</p>
-      </div>
-    );
-    if (activeTab === "Settings") return (
-      <div className="bg-white rounded-xl shadow-sm p-6 max-w-2xl">
-        <h3 className="text-lg font-bold mb-6">Settings ⚙️</h3>
-        {[["Email Notifications",true],["Dark Mode",false],["Auto Backup",true]].map((s,i)=>(
-          <div key={i} className="flex justify-between items-center py-4 border-b">
-            <span className="font-medium">{s[0]}</span>
-            <div className={`w-12 h-6 rounded-full p-1 cursor-pointer ${s[1]?"bg-blue-600":"bg-gray-300"}`}>
-              <div className={`w-4 h-4 bg-white rounded-full ${s[1]?"ml-auto":""}`}></div>
-            </div>
-          </div>
-        ))}
-        <button className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg">Save Changes</button>
-      </div>
-    );
+  const handleMenuClick = (page) => {
+    setActivePage(page);
+    setSidebarOpen(false);
+  };
+
+  const API_URL =
+    import.meta.env.VITE_API_URL ||
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+      ? "http://localhost:5000"
+      : "https://mongo-db-ten-drab.vercel.app");
+
+  const handleLogout = async () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    try {
+      await fetch(`${API_URL}/api/auth/logout`, { method: "POST", credentials: "include" });
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      navigate("/login");
+    } finally {
+      setLoggingOut(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      <aside className={`fixed md:static z-20 w-64 bg-white shadow-lg h-screen transform transition-transform ${sidebarOpen?"translate-x-0":"-translate-x-full"} md:translate-x-0 flex flex-col`}>
-        <div className="p-6 text-2xl font-bold border-b">Dashboard</div>
-        <ul className="flex-1 p-4 space-y-1">
-          {navItems.map((n,i)=>(
-            <li key={i}><a onClick={()=>{setActiveTab(n.label); setSidebarOpen(false);}}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer ${activeTab===n.label?"bg-blue-600 text-white":"text-gray-600 hover:bg-gray-100"}`}>
-              <span className="text-xl">{n.icon}</span><span>{n.label}</span></a></li>
+    <div className="min-h-screen bg-slate-950 text-white flex">
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black/60 z-30 lg:hidden" onClick={() => setSidebarOpen(false)}></div>
+      )}
+      <aside className={`fixed lg:static top-0 left-0 z-40 h-screen w-64 bg-slate-900 border-r border-slate-800 transform transition-transform duration-300 ${sidebarOpen? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
+        <div className="h-20 flex items-center px-6 border-b border-slate-800">
+          <div>
+            <h1 className="text-2xl font-bold text-orange-400">KA Dashboard</h1>
+            <p className="text-xs text-slate-400">Kanwal Afrin Sheikh</p>
+          </div>
+        </div>
+        <nav className="p-4 space-y-2">
+          {menuItems.map((item) => (
+            <button key={item.name} onClick={() => handleMenuClick(item.name)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition ${activePage === item.name? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "text-slate-300 hover:bg-slate-800"}`}>
+              <span className="text-lg">{item.icon}</span><span>{item.name}</span>
+            </button>
           ))}
-        </ul>
-        <button onClick={()=>navigate("/login")} className="m-4 bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600 font-semibold">Logout</button>
+        </nav>
+        <div className="absolute bottom-5 left-4 right-4">
+          <button onClick={handleLogout} disabled={loggingOut}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition disabled:opacity-50">
+            <span>🚪</span>{loggingOut? "Logging out..." : "Logout"}
+          </button>
+        </div>
       </aside>
-      <div className="flex-1">
-        <header className="bg-white shadow-sm p-4 flex items-center gap-4 sticky top-0 z-10">
-          <button onClick={()=>setSidebarOpen(!sidebarOpen)} className="md:hidden text-2xl">☰</button>
-          <h2 className="text-xl font-bold hidden sm:block">{activeTab}</h2>
-          <div className="flex-1 max-w-md ml-auto relative">
-            <input value={search} onChange={e=>setSearch(e.target.value)} type="text" placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            <span className="absolute left-3 top-2.5">🔍</span>
+      <main className="flex-1 min-w-0">
+        <header className="h-20 bg-slate-900/80 backdrop-blur border-b border-slate-800 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-4">
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-2xl">☰</button>
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold">{activePage}</h2>
+              <p className="text-xs sm:text-sm text-slate-400">Welcome back, Kanwal 👋</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="hidden md:block text-sm text-gray-600">Welcome, Admin</span>
-            <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl">👤</div>
+          <div className="hidden md:block">
+            <input type="text" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)}
+              className="w-56 lg:w-72 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none focus:border-orange-500" />
           </div>
+          <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center font-bold">KA</div>
         </header>
-        <main className="p-6">{renderContent()}</main>
-      </div>
+        <section className="p-4 sm:p-6 lg:p-8">
+          {activePage === "Dashboard" && (
+            <>
+              <div className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-orange-500/20 to-slate-800 border border-orange-500/20">
+                <h3 className="text-2xl font-bold mb-2">Welcome to your Dashboard 🚀</h3>
+                <p className="text-slate-400">Manage your projects, activities and account from here.</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+                <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800"><p className="text-slate-400 text-sm">Total Projects</p><h3 className="text-3xl font-bold mt-2">12</h3><p className="text-green-400 text-sm mt-2">+12% this month</p></div>
+                <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800"><p className="text-slate-400 text-sm">Completed</p><h3 className="text-3xl font-bold mt-2">8</h3><p className="text-green-400 text-sm mt-2">+8% this month</p></div>
+                <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800"><p className="text-slate-400 text-sm">In Progress</p><h3 className="text-3xl font-bold mt-2">3</h3><p className="text-orange-400 text-sm mt-2">Active projects</p></div>
+                <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800"><p className="text-slate-400 text-sm">Messages</p><h3 className="text-3xl font-bold mt-2">24</h3><p className="text-blue-400 text-sm mt-2">5 unread</p></div>
+              </div>
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                <div className="p-6 border-b border-slate-800"><h3 className="text-xl font-bold">Recent Activity</h3><p className="text-sm text-slate-400 mt-1">Your latest project activity</p></div>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[600px]">
+                    <thead><tr className="border-b border-slate-800 text-left"><th className="px-6 py-4 text-slate-400 font-medium">Project</th><th className="px-6 py-4 text-slate-400 font-medium">Status</th><th className="px-6 py-4 text-slate-400 font-medium">Date</th></tr></thead>
+                    <tbody>
+                      {activities.map((activity, index) => (
+                        <tr key={index} className="border-b border-slate-800 last:border-0 hover:bg-slate-800/50">
+                          <td className="px-6 py-4">{activity.title}</td>
+                          <td className="px-6 py-4"><span className={`px-3 py-1 rounded-full text-xs ${activity.status === "Completed"? "bg-green-500/10 text-green-400" : activity.status === "In Progress"? "bg-orange-500/10 text-orange-400" : "bg-yellow-500/10 text-yellow-400"}`}>{activity.status}</span></td>
+                          <td className="px-6 py-4 text-slate-400">{activity.date}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
+          {activePage!== "Dashboard" && (
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+              <h3 className="text-2xl font-bold mb-3">{activePage}</h3>
+              <p className="text-slate-400">Content for {activePage} will appear here.</p>
+            </div>
+          )}
+        </section>
+      </main>
     </div>
   );
 }
+
+export default Dashboard;
+
+
